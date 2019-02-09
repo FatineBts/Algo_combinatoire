@@ -17,15 +17,15 @@ fobjX=@(X)objectiveyz(YZ,X,P,N,D);
 y = zeros(N,N-2); 
 z = zeros(N-2,N); 
 
-y(1,1) = 1; 
+y(1,1) = 1; %liens
 y(2,1) = 1; 
 y(3,2) = 1; 
 y(4,2) = 1; 
 z(1,2) = 1; 
 
-y = reshape(y.',1,[]);
+y = reshape(y.',1,[]); %vecteur
 z = reshape(z.',1,[]);
-X=reshape(X.',1,[]);
+X = reshape(X.',1,[]);
 YZ = [y,z]; 
 
 %Sous-problème
