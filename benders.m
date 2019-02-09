@@ -1,4 +1,6 @@
-function x,y,z=Benders(X0,fobjyz,A,b,Aeq,beq,YZ0,P,N,D)
+function [X,YZ,Longueur]=benders(X0,YZ0,P,N,D)
+
+disp('marche')
 
 X = X0; 
 A_z = []; 
@@ -14,19 +16,21 @@ k = 0;
 stop = false; 
 L = N*(N-2) + (N-2)*(N-2); 
 
+disp('marche2')
+
 while(stop==false)
+disp('marche3')
     
     %Sous-problème : on cherche x 
-    fobjX=@(X)objectiveyz(YZ,X,P,N,D);
-
-    x = patternsearch(fobjX,X,[],[]); 
-
+    fobjX=@(X)objectiveyz(YZ,X,P,N,D)
+    X = patternsearch(fobjX,X,[],[]); 
+    disp('ok')
     %On met à jour UB
-    UB = min(UB,fobjX(x)); 
+    UB = min(UB,fobjX(X)); 
     ligne = zeros(1,1+L);
     ligne(1) = -1; 
     A_z = [A_z; ligne]; 
-    b_z = [b_z; -fobjX(x)]; 
+    b_z = [b_z; -fobjX(X)]; 
 
     %Sous-problème : on cherche z
     fobjZ= zeros(L+1,1);
@@ -45,7 +49,15 @@ while(stop==false)
         stop = true;       
     else 
         YZ = XZ(2:end); 
-    end 
-end 
+    end
+    
+disp('marche4')
+    
+end
+
+disp('marche5')
+
+%Pour le plot
+Longueur = YZ(1); 
 
 end 

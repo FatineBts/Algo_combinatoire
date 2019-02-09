@@ -1,6 +1,6 @@
 function script
 
-N=5;
+N=4;
 D=3;
 X = rand(N-2,D); %points steiner
 P = rand(N,D); %terminaux
@@ -21,7 +21,11 @@ y(3,2) = 1;
 y(4,2) = 1; 
 z(1,2) = 1; 
 
-%Sous-problème
-x,y,z=Benders(X,fobjyz,A,b,Aeq,beq,YZ,P,N,D); 
+y = reshape(y.',1,[]);
+z = reshape(z.',1,[]);
+X=reshape(X.',1,[]);
+YZ = [y,z] 
 
+%Sous-problème
+[X,YZ,Longueur] = benders(X,YZ,P,N,D) 
 end 

@@ -1,5 +1,5 @@
 function res = objectiveyz(YZ,X,P,N,D)
-X=reshape(X,[D,N])';
+X=reshape(X,[D,N-2])';
 resy=0;
 resz=0;
 col=N-2;
