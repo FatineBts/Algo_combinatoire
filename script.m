@@ -3,7 +3,8 @@ function script
 N=4;
 D=3;
 X = rand(N-2,D); %points steiner
-P = rand(N,D); %terminaux
+P = zeros(N,D); %terminaux
+P = [0 0 0; 1 0 0; 0.5 0.86602540378 0.0; 0.5 0.28867513459 0.81649658092];
 [A,b,Aeq,beq]=contraintesyz(N,D);
 
 %[A,b,Aeq,beq]=contraintesX(N,D);

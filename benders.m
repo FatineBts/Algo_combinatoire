@@ -15,7 +15,6 @@ K = [];
 k = 0; 
 stop = false; 
 COL = N*(N-2) + (N-2)*(N-2); 
-
 while(stop==false && k < 1000)
     
     %Sous-problème : on cherche x 
@@ -27,7 +26,7 @@ while(stop==false && k < 1000)
     ligne = zeros(1,1+COL);
     ligne(1) = -1; 
     A_z = [A_z; ligne]; 
-    b_z = [b_z; -fobjX(X)]; 
+    b_z = [b_z; -fobjX(X)];
     
     %Sous-problème : on cherche z
     fobjZ= zeros(COL+1,1);
@@ -38,9 +37,9 @@ while(stop==false && k < 1000)
     ub(1) = +Inf; 
     
     XZ = intlinprog(fobjZ,intcon,A_z,b_z,A_eqz,b_eqz, lb, ub); %on a Z puis YZ
-    LB = XZ; 
+    LB = XZ(1); 
 
-    k = k + 1
+    k = k + 1;
 
     if(LB >=UB) 
         stop = true;       
@@ -51,6 +50,6 @@ while(stop==false && k < 1000)
 end
 
 %Pour le plot
-Longueur = YZ(1); 
+Longueur = XZ(1); 
 
 end 
