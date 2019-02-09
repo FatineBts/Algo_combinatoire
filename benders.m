@@ -1,10 +1,10 @@
-function [X,YZ,Longueur]=benders(X0,YZ0,P,N,D)
-
-disp('marche')
+function [X,YZ,Longueur]=benders(X0,YZ0,P,N,D,A,b,Aeq,beq)
 
 X = X0; 
-A_z = []; 
-b_z = []; 
+A_z = [zeros(size(A,1),1),A]; 
+b_z = b;
+A_eqz = [zeros(size(Aeq,1),1),Aeq]; 
+b_eqz = beq;
 YZ = YZ0; 
 
 %initialisation
@@ -14,48 +14,41 @@ UB = +inf;
 K = []; 
 k = 0; 
 stop = false; 
-L = N*(N-2) + (N-2)*(N-2); 
+COL = N*(N-2) + (N-2)*(N-2); 
 
-disp('marche2')
-
-while(stop==false)
-disp('marche3')
+while(stop==false && k < 1000)
     
     %Sous-problème : on cherche x 
     fobjX=@(X)objectiveyz(YZ,X,P,N,D)
     X = patternsearch(fobjX,X,[],[]); 
-    disp('ok')
+
     %On met à jour UB
     UB = min(UB,fobjX(X)); 
-    ligne = zeros(1,1+L);
+    ligne = zeros(1,1+COL);
     ligne(1) = -1; 
     A_z = [A_z; ligne]; 
     b_z = [b_z; -fobjX(X)]; 
-
+    
     %Sous-problème : on cherche z
-    fobjZ= zeros(L+1,1);
+    fobjZ= zeros(COL+1,1);
     fobjZ(1) = 1; 
-    intcon = 2:L+1; %elles sont toutes entières sauf la première
-    lb = zeros(L+1,1);
-    ub = ones(L+1,1);
+    intcon = 2:COL+1; %elles sont toutes entières sauf la première
+    lb = zeros(COL+1,1);
+    ub = ones(COL+1,1);
     ub(1) = +Inf; 
     
-    XZ = intlinprog(fobjZ,intcon,A_z,b_z,[], [], lb, ub); %on a Z puis YZ
+    XZ = intlinprog(fobjZ,intcon,A_z,b_z,A_eqz,b_eqz, lb, ub); %on a Z puis YZ
     LB = XZ; 
 
-    k = k + 1;
+    k = k + 1
 
     if(LB >=UB) 
         stop = true;       
     else 
         YZ = XZ(2:end); 
     end
-    
-disp('marche4')
-    
+        
 end
-
-disp('marche5')
 
 %Pour le plot
 Longueur = YZ(1); 

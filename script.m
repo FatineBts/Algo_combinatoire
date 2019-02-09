@@ -5,6 +5,7 @@ D=3;
 X = rand(N-2,D); %points steiner
 P = rand(N,D); %terminaux
 [A,b,Aeq,beq]=contraintesyz(N,D);
+
 %[A,b,Aeq,beq]=contraintesX(N,D);
 
 fobjyz=@(YZ)objectiveyz(YZ,X,P,N,D);
@@ -24,8 +25,8 @@ z(1,2) = 1;
 y = reshape(y.',1,[]);
 z = reshape(z.',1,[]);
 X=reshape(X.',1,[]);
-YZ = [y,z] 
+YZ = [y,z]; 
 
 %Sous-problème
-[X,YZ,Longueur] = benders(X,YZ,P,N,D) 
+[X,YZ,Longueur] = benders(X,YZ,P,N,D,A,b,Aeq,beq)
 end 

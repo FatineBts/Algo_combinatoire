@@ -1,42 +1,63 @@
-function x,y,z=Benders(X0,fobjyz,A,b,Aeq,beq,YZ0,P,N,D)
+function [X,YZ,Longueur]=benders(X0,YZ0,P,N,D,A,b,Aeq,beq)
+
+disp('marche')
 
 X = X0; 
-A_z = []; 
-b_z = []; 
+A_z = [zero,A]; 
+b_z = 0,b; 
 YZ = YZ0; 
-
-%on résout à l'aide de patternsearch 
-%on pose un x aléatoire et on cherche un bon y et z puis on cherche un bon
-%x pour ce couple (y,z) = principe de l'algorithme de Smith 
-%L'algorithme de Smith cherche pour toutes les topologies possibles donc
-%pas polynomial. On ajoute la coupe pour s'arrêter à un moment afin que ce
-%soit polynomial. 
-
-%Topologie : on a les points terminaux imposés et le point de Steiner et on
-%effectue des liens = comment on distribue les arrêtes. On considère qu'on
-%peut faire bouger les points de Steiner de manière à changer la distance
-%entre les points terminaux et les points de Steiner.
 
 %initialisation
 k = 1; 
 LB = -inf; 
 UB = +inf; 
 K = []; 
+k = 0; 
+stop = false; 
+L = N*(N-2) + (N-2)*(N-2); 
 
-%Sous-problème : on cherche x 
-fobjX=@(X)objectiveyz(YZ,X,P,N,D);
+disp('marche2')
 
-x = patternsearch(fobjX,X,[],[]); 
+while(stop==false)
+disp('marche3')
+    
+    %Sous-problème : on cherche x 
+    fobjX=@(X)objectiveyz(YZ,X,P,N,D)
+    X = patternsearch(fobjX,X,[],[]); 
+    disp('ok')
+    %On met à jour UB
+    UB = min(UB,fobjX(X)); 
+    ligne = zeros(1,1+L);
+    ligne(1) = -1; 
+    A_z = [A_z; ligne]; 
+    b_z = [b_z; -fobjX(X)]; 
 
-%On met à jour UB
-UB = min(UB,fobjX(x)); 
-A_z = [A_z; -1]; 
-b_z = [b_z; -fobjX(x)]; 
+    %Sous-problème : on cherche z
+    fobjZ= zeros(L+1,1);
+    fobjZ(1) = 1; 
+    intcon = 2:L+1; %elles sont toutes entières sauf la première
+    lb = zeros(L+1,1);
+    ub = ones(L+1,1);
+    ub(1) = +Inf; 
+    
+    XZ = intlinprog(fobjZ,intcon,A_z,b_z,[], [], lb, ub); %on a Z puis YZ
+    LB = XZ; 
 
-%Sous-problème : on cherche z
-fobjZ=@(Z) Z; 
-Z = intlinprog(fobjZ,A_z,b_z); 
+    k = k + 1;
 
+    if(LB >=UB) 
+        stop = true;       
+    else 
+        YZ = XZ(2:end); 
+    end
+    
+disp('marche4')
+    
+end
 
+disp('marche5')
+
+%Pour le plot
+Longueur = YZ(1); 
 
 end 

@@ -8,7 +8,7 @@ Aeq=zeros(Leq,COL);
 col=N-2;
 for p=1:N %1ere contrainte
     for q=1:N-2
-        Aeq(p,(p-1)*col +q)=1;
+        Aeq(p,p*col +q)=1;
     end   
 end
 ind=N*(N-2);
@@ -16,19 +16,19 @@ saut=N;
 
  for q=1:N-2 %seconde et troisième contraintes
      for p=1:N
-         Aeq(saut+q,(p-1)*col+q)=1;
+         Aeq(saut+q,p*col+q)=1;
      end
  end
  saut3=saut+ N-2;
   for q=1:N-2 %seconde et troisième contraintes
      for p=1:N-2
-        Aeq(saut3+q, ind+ (p-1)*col+q)=1;
+        Aeq(saut3+q, ind+ p*col+q)=1;
          if (p<q)
-             Aeq(saut+q, ind +(p-1)*col+q)=1;
+             Aeq(saut+q, ind +p*col+q)=1;
          end
          if (p>q)
              ind=N*(N-2);
-             Aeq(saut+q, ind +(q-1)*col+p)=1;
+             Aeq(saut+q, ind +q*col+p)=1;
          end     
      end
   end
@@ -36,7 +36,7 @@ saut=N;
  
  for q=1:N-2 %contrainte d'inégalité  : 2 ne marche que pour la dimension >= 3
      for p=1:N-2
-         A(q,ind+(p-1)*col+q)=1;
+         A(q,ind+p*col+q)=1;
      end
  end
 
