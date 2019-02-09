@@ -17,13 +17,13 @@ stop = false;
 COL = N*(N-2) + (N-2)*(N-2); 
 while(stop==false && k < 1000)
     
-    %Sous-problème : on cherche x 
+    %Sous-problÃ¨me : on cherche x 
     fobjX=@(X)objectiveyz(YZ,X,P,N,D)
     X = patternsearch(fobjX,X,[],[]); 
 
-    %On met à jour UB
+    %On met Ã  jour UB
     UB = min(UB,fobjX(X)); 
-    ligne = zeros(1,1+COL);
+    ligne = zeros(1,1+COL); % nouvelle contrainte
     ligne(1) = -1; 
     
     cnt = 2; 
@@ -45,10 +45,10 @@ while(stop==false && k < 1000)
     A_z = [A_z; ligne]
     b_z = [b_z; 0];
     
-    %Sous-problème : on cherche z
+    %Sous-problÃ¨me : on cherche z
     fobjZ = zeros(COL+1,1);
     fobjZ(1) = 1; 
-    intcon = 2:COL+1; %elles sont toutes entières sauf la première
+    intcon = 2:COL+1; %elles sont toutes entiÃ¨res sauf la premiÃ¨re
     lb = zeros(COL+1,1);
     ub = zeros(COL+1,1);
     ub(:) = +Inf;
