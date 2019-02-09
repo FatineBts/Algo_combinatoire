@@ -1,3 +1,5 @@
+function script
+
 N=5;
 D=3;
 X = rand(N-2,D); %points steiner
@@ -7,3 +9,19 @@ P = rand(N,D); %terminaux
 
 fobjyz=@(YZ)objectiveyz(YZ,X,P,N,D);
 fobjX=@(X)objectiveyz(YZ,X,P,N,D);
+
+%Benders
+%Initialisation
+y = zeros(N,N-2); 
+z = zeros(N-2,N); 
+
+y(1,1) = 1; 
+y(2,1) = 1; 
+y(3,2) = 1; 
+y(4,2) = 1; 
+z(1,2) = 1; 
+
+%Sous-problème
+x,y,z=Benders(X,fobjyz,A,b,Aeq,beq,YZ,P,N,D); 
+
+end 

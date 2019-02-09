@@ -27,7 +27,7 @@ saut=N;
      end
  end
  saut= N+ N-2;
- for q=1:N-2 %contrainte d'inégalité  
+ for q=1:N-2 %contrainte d'inégalité  : 2 ne marche que pour la dimension >= 3
      for p=1:N-2
          Aeq(saut+q, ind+ p*col+q)=1;
      end
