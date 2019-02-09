@@ -15,9 +15,9 @@ fobjX=@(X)objectiveyz(YZ,X,P,N,D);
 %Benders
 %Initialisation
 y = zeros(N,N-2); 
-z = zeros(N-2,N); 
+z = zeros(N-2,N-2); 
 
-y(1,1) = 1; %liens
+y(1,1) = 1; %liens issus de Smith
 y(2,1) = 1; 
 y(3,2) = 1; 
 y(4,2) = 1; 
@@ -29,5 +29,14 @@ X = reshape(X.',1,[]);
 YZ = [y,z]; 
 
 %Sous-problème
-[X,YZ,Longueur] = benders(X,YZ,P,N,D,A,b,Aeq,beq)
+%[X,YZ,Longueur] = benders(X,YZ,P,N,D,A,b,Aeq,beq)
+[X,YZ,Longueur] = benders2(X,YZ,P,N,D,A,b,Aeq,beq)
+X=reshape(X,[D,N-2])';
+
+% links
+plot3(P(:,1),P(:,2),P(:,3),'o')
+hold on
+plot3(X(:,1),X(:,2),X(:,3),'o')
+
+
 end 
