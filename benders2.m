@@ -1,11 +1,11 @@
-function [X,YZ,Longueur]=benders2(X0,YZ0,P,N,D,A,b,Aeq,beq)
+function [k,X,YZ,Longueur]=benders2(X0,YZ0,P,N,D,A,b,Aeq,beq)
 
 X = X0; 
 A_z = [zeros(size(A,1),1),A];
 b_z = b;
 A_eqz = [zeros(size(Aeq,1),1),Aeq];
 b_eqz = beq;
-YZ = YZ0; 
+YZ = YZ0;
 
 %initialisation
 k = 1; 
@@ -16,12 +16,11 @@ k = 0;
 stop = false; 
 COL = N*(N-2) + (N-2)*(N-2); 
 while(stop==false && k < 1000)
-    
-    %Sous-problème : on cherche x 
+    %Sous-probleme : on cherche x 
     fobjX=@(X)objectiveyz(YZ,X,P,N,D)
     X = patternsearch(fobjX,X,[],[]); 
 
-    %On met à jour UB
+    %On met a jour UB
     UB = min(UB,fobjX(X));
     
     % nouvelle contrainte
@@ -48,7 +47,7 @@ while(stop==false && k < 1000)
         end 
     end
     
-    A_z = [A_z; ligne]
+    A_z = [A_z; ligne];
     b_z = [b_z; 0];
     
     %Sous-probleme : on cherche z

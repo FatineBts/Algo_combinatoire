@@ -8,17 +8,29 @@ eval(str);
 % tetraedre
 % N=4;
 % D=3;
+% X = rand(N-2,D); %points steiner
 % P = zeros(N,D); %terminaux
 % P = [0 0 0; 1 0 0; 0.5 0.86602540378 0.0; 0.5 0.28867513459 0.81649658092];
+% [A,b,Aeq,beq]=contraintesyz(N,D);
 
+%[A,b,Aeq,beq]=contraintesX(N,D);
 
-[A,b,Aeq,beq]=contraintesyz(N,D);
+fobjyz=@(YZ)objectiveyz(YZ,X,P,N,D);
+fobjX=@(X)objectiveyz(YZ,X,P,N,D);
+
 %Benders
 %Initialisation
-X = rand(N-2,D); %points steiner
-[y,z]=lienscube(N); %topo init cube
-%[y,z]=lienstetra(N); %topo init tetra
+y = zeros(N,N-2); 
+z = zeros(N-2,N-2); 
 
+%liens tetraedre issus de Smith
+% y(1,1) = 1; 
+% y(2,1) = 1; 
+% y(3,2) = 1; 
+% y(4,2) = 1; 
+% z(1,2) = 1;
+
+%liens cube issus de S
 
 
 y = reshape(y.',1,[]); %vecteur
@@ -28,11 +40,9 @@ YZ = [y,z];
 
 %Sous-problème
 %[X,YZ,Longueur] = benders(X,YZ,P,N,D,A,b,Aeq,beq)
-[k,X,YZ,Longueur] = benders2(X,YZ,P,N,D,A,b,Aeq,beq);
-Longueur
-disp('Nb iterations')
-disp(k)
+[X,YZ,Longueur] = benders2(X,YZ,P,N,D,A,b,Aeq,beq)
 X=reshape(X,[D,N-2])';
-%plot
 drawing(X,P,YZ,N)
+ 
+
 end 
