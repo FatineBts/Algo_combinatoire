@@ -1,5 +1,5 @@
 function script
-
+close all
 N=4;
 D=3;
 X = rand(N-2,D); %points steiner
@@ -32,11 +32,7 @@ YZ = [y,z];
 %[X,YZ,Longueur] = benders(X,YZ,P,N,D,A,b,Aeq,beq)
 [X,YZ,Longueur] = benders2(X,YZ,P,N,D,A,b,Aeq,beq)
 X=reshape(X,[D,N-2])';
-
-% links
-plot3(P(:,1),P(:,2),P(:,3),'o')
-hold on
-plot3(X(:,1),X(:,2),X(:,3),'o')
-
+drawing(X,P,YZ,N)
+ 
 
 end 
