@@ -2,5 +2,5 @@
 
 School project to solve Euclidean Steiner Tree problem with Benders method in Matlab. There is also Warren-Smith's implementation in C to help compare our final results with the exact results obtained from Warren-Smith's algorithm. 
 
-[tetra.pdf](https://github.com/FatineBts/Algo_combinatoire/files/2848969/tetra.pdf)
+![toto](https://user-images.githubusercontent.com/23095219/52534905-c6a2d980-2d47-11e9-9a87-462ece4ddc00.jpg)
 
