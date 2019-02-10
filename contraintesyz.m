@@ -1,9 +1,8 @@
 function [A,b,Aeq,beq]=contraintesyz(N,D)
 Leq=N+ 2*(N-2); %pour les contraintes d'égalité 
-L=N-2; %inégalité
+
 COL=N*(N-2) + (N-2)*(N-2); %nb variables
 
-A=zeros(L,COL); %matrice de contraintes
 Aeq=zeros(Leq,COL);
 col=N-2;
 for p=1:N %1ere contrainte
@@ -14,15 +13,15 @@ end
 ind=N*(N-2);
 saut=N;
 
- for q=1:N-2 %seconde et troisième contraintes
+ for q=1:N-2 %seconde contrainte
      for p=1:N
          Aeq(saut+q,(p-1)*col+q)=1;
      end
  end
  saut3=saut+ N-2;
-  for q=1:N-2 %seconde et troisième contraintes
+  for q=1:N-2 %seconde contrainte
      for p=1:N-2
-        Aeq(saut3+q, ind+ (p-1)*col+q)=1;
+        Aeq(saut3+q, ind+ (p-1)*col+q)=1; %troisieme contrainte
          if (p<q)
              Aeq(saut+q, ind +(p-1)*col+q)=1;
          end
@@ -32,15 +31,21 @@ saut=N;
          end     
      end
   end
- size(Aeq)
- 
- for q=1:N-2 %contrainte d'inégalité  : 2 ne marche que pour la dimension >= 3
-     for p=1:N-2
-         A(q,ind+(p-1)*col+q)=1;
+
+ if(D>=3) %contrainte d'inégalité  : 2 ne marche que pour la dimension >= 3
+     L=N-2; 
+     A=zeros(L,COL); %matrice de contraintes
+     b=2*ones(L,1); %second membre
+     for q=1:N-2 
+         for p=1:N-2
+             A(q,ind+(p-1)*col+q)=1;
+         end
      end
+ else
+     A=[];
+     b=[];
  end
 
- b=2*ones(L,1); %second membre
  beq=ones(Leq,1);
  beq(N+1:N+N-2)=3;
 end
